@@ -1,11 +1,14 @@
 # Set DEBUGGER=1 to build debug symbols
 export LDFLAGS := $(if $(LDFLAGS),$(LDFLAGS),$(if $(DEBUGGER),,-s -w) $(shell ./hack/version.sh))
-export IMAGE_REGISTRY ?= ghcr.io
+#export IMAGE_REGISTRY ?= ghcr.io
+export IMAGE_REGISTRY ?= quchengrep
 
 # SET IMAGE_REGISTRY to change the docker registry
 IMAGE_REGISTRY_PREFIX := $(if $(IMAGE_REGISTRY),$(IMAGE_REGISTRY)/,)
 
-export IMAGE_TAG ?= latest
+#export IMAGE_TAG ?= latest
+#export IMAGE_PROJECT ?= chaos-mesh
+export IMAGE_TAG ?= 20221201
 export IMAGE_PROJECT ?= chaos-mesh
 export IMAGE_BUILD ?= 1
 
@@ -216,9 +219,9 @@ $(eval $(call IMAGE_TEMPLATE,chaos-jvm,images/chaos-jvm))
 $(eval $(call IMAGE_TEMPLATE,chaos-dlv,images/chaos-dlv))
 
 docker-push:
-	docker push "${IMAGE_REGISTRY_PREFIX}chaos-mesh/chaos-mesh:${IMAGE_TAG}"
-	docker push "${IMAGE_REGISTRY_PREFIX}chaos-mesh/chaos-dashboard:${IMAGE_TAG}"
-	docker push "${IMAGE_REGISTRY_PREFIX}chaos-mesh/chaos-daemon:${IMAGE_TAG}"
+	docker push "${IMAGE_REGISTRY_PREFIX}chaos-mesh.chaos-mesh:${IMAGE_TAG}"
+	docker push "${IMAGE_REGISTRY_PREFIX}chaos-mesh.chaos-dashboard:${IMAGE_TAG}"
+	docker push "${IMAGE_REGISTRY_PREFIX}chaos-mesh.chaos-daemon:${IMAGE_TAG}"
 
 docker-push-e2e:
 	docker push "${IMAGE_REGISTRY_PREFIX}pingcap/e2e-helper:${IMAGE_TAG}"
