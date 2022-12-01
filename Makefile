@@ -72,7 +72,7 @@ RUN_IN_BUILD_SHELL=$(shell $(BASIC_IMAGE_ENV)\
 
 CLEAN_TARGETS :=
 
-all: yaml image docker-tag docker-push
+all: yaml image docker-login docker-tag docker-push
 
 test-utils: timer multithread_tracee pkg/time/fakeclock/fake_clock_gettime.o pkg/time/fakeclock/fake_gettimeofday.o
 
@@ -222,6 +222,8 @@ $(eval $(call IMAGE_TEMPLATE,chaos-kernel,images/chaos-kernel))
 $(eval $(call IMAGE_TEMPLATE,chaos-jvm,images/chaos-jvm))
 $(eval $(call IMAGE_TEMPLATE,chaos-dlv,images/chaos-dlv))
 
+docker-login:
+	docker login -u="quchengrep" -p="9DMmeidui"
 
 docker-tag:
 	docker tag "${IMAGE_REGISTRY_PREFIX}chaos-mesh/chaos-mesh:${IMAGE_TAG}" "${IMAGE_REGISTRY_PREFIX_NEO}chaos-mesh.chaos-mesh:${IMAGE_TAG_NEO}"
