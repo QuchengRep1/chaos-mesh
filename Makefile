@@ -1,15 +1,19 @@
 # Set DEBUGGER=1 to build debug symbols
 export LDFLAGS := $(if $(LDFLAGS),$(LDFLAGS),$(if $(DEBUGGER),,-s -w) $(shell ./hack/version.sh))
-#export IMAGE_REGISTRY ?= ghcr.io
-export IMAGE_REGISTRY ?= quchengrep
+export IMAGE_REGISTRY ?= ghcr.io
+export IMAGE_REGISTRY_NEO ?= quchengrep
+
+
 
 # SET IMAGE_REGISTRY to change the docker registry
 IMAGE_REGISTRY_PREFIX := $(if $(IMAGE_REGISTRY),$(IMAGE_REGISTRY)/,)
+IMAGE_REGISTRY_PREFIX_NEO := $(if $(IMAGE_REGISTRY_NEO),$(IMAGE_REGISTRY_NEO)/,)
 
-#export IMAGE_TAG ?= latest
-#export IMAGE_PROJECT ?= chaos-mesh
-export IMAGE_TAG ?= 20221201
+export IMAGE_TAG ?= latest
 export IMAGE_PROJECT ?= chaos-mesh
+export IMAGE_TAG_NEO ?= 20221201
+export IMAGE_PROJECT_NEO ?= chaos-mesh
+
 export IMAGE_BUILD ?= 1
 
 # todo: rename the project/repository of e2e-helper to chaos-mesh
@@ -68,7 +72,7 @@ RUN_IN_BUILD_SHELL=$(shell $(BASIC_IMAGE_ENV)\
 
 CLEAN_TARGETS :=
 
-all: yaml image docker-push
+all: yaml image docker-tag docker-push
 
 test-utils: timer multithread_tracee pkg/time/fakeclock/fake_clock_gettime.o pkg/time/fakeclock/fake_gettimeofday.o
 
@@ -218,10 +222,16 @@ $(eval $(call IMAGE_TEMPLATE,chaos-kernel,images/chaos-kernel))
 $(eval $(call IMAGE_TEMPLATE,chaos-jvm,images/chaos-jvm))
 $(eval $(call IMAGE_TEMPLATE,chaos-dlv,images/chaos-dlv))
 
+
+docker-tag:
+	docker tag "${IMAGE_REGISTRY_PREFIX}chaos-mesh/chaos-mesh:${IMAGE_TAG}" "${IMAGE_REGISTRY_PREFIX_NEO}chaos-mesh.chaos-mesh:${IMAGE_TAG_NEO}"
+	docker tag "${IMAGE_REGISTRY_PREFIX}chaos-mesh/chaos-dashboard:${IMAGE_TAG}" "${IMAGE_REGISTRY_PREFIX_NEO}chaos-mesh.chaos-dashboard:${IMAGE_TAG_NEO}"
+	docker tag "${IMAGE_REGISTRY_PREFIX}chaos-mesh/chaos-daemon:${IMAGE_TAG}" "${IMAGE_REGISTRY_PREFIX_NEO}chaos-mesh.chaos-daemon:${IMAGE_TAG_NEO}"
+
 docker-push:
-	docker push "${IMAGE_REGISTRY_PREFIX}chaos-mesh.chaos-mesh:${IMAGE_TAG}"
-	docker push "${IMAGE_REGISTRY_PREFIX}chaos-mesh.chaos-dashboard:${IMAGE_TAG}"
-	docker push "${IMAGE_REGISTRY_PREFIX}chaos-mesh.chaos-daemon:${IMAGE_TAG}"
+	docker push "${IMAGE_REGISTRY_PREFIX_NEO}chaos-mesh.chaos-mesh:${IMAGE_TAG_NEO}"
+	docker push "${IMAGE_REGISTRY_PREFIX_NEO}chaos-mesh.chaos-dashboard:${IMAGE_TAG_NEO}"
+	docker push "${IMAGE_REGISTRY_PREFIX_NEO}chaos-mesh.chaos-daemon:${IMAGE_TAG_NEO}"
 
 docker-push-e2e:
 	docker push "${IMAGE_REGISTRY_PREFIX}pingcap/e2e-helper:${IMAGE_TAG}"

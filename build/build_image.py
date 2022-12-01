@@ -82,7 +82,7 @@ def get_image_full_name(name):
     registry = get_image_registry(name)
     tag = get_image_tag(name)
 
-    return f"{registry}/{project}.{name}:{tag}"
+    return f"{registry}/{project}/{name}:{tag}"
 
 
 def pass_env_to_build_arg(cmd, arg_name):
