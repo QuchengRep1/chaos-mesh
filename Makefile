@@ -68,7 +68,7 @@ RUN_IN_BUILD_SHELL=$(shell $(BASIC_IMAGE_ENV)\
 
 CLEAN_TARGETS :=
 
-all: yaml image
+all: yaml image docker-push
 
 test-utils: timer multithread_tracee pkg/time/fakeclock/fake_clock_gettime.o pkg/time/fakeclock/fake_gettimeofday.o
 
