@@ -27,8 +27,7 @@ jobs:
           go-version: 1.18
       # 3. 运行 go 代码
       - name: Run code
-	    run: make
-      # run: go run main.go --username=${{ secrets.DOCKERHUB_USERNAME }} --password=${{ secrets.DOCKERHUB_TOKEN }} --content='${{ github.event.issue.body }}' --maxContent=11 --outputPath=output.sh
+        run: UI=1 make
       # 4. 当以上步骤成功时，为 issues 添加 success 标签
       - name: Success issues
         if: ${{ success() }}
